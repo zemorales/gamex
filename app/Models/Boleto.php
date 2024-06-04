@@ -14,5 +14,7 @@ class Boleto extends Model
     public function torneos()
     {
         return $this->belongsTo(Torneo::class);
+
+        //para probar el commit
     }
 }
