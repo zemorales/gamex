@@ -15,7 +15,7 @@ class CreateTorneosHasUsuariosTable extends Migration
     {
         Schema::create('torneos_has_usuarios', function (Blueprint $table) {
             $table->id();
-            $table->enum('tipo_usuario', array('admin', 'participante', 'visitante'));
+            $table->enum('tipo_usuario', array('admin', 'participante', 'visitante','responsable'));
 
             $table->bigInteger('torneo_id')->unsigned();
             $table->foreign('torneo_id')->references('id')->on('torneos')

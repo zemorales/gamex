@@ -19,7 +19,7 @@ class Torneo extends Model
     {
         return $this->belongsTo(Categoria::class);
     }
-    public function boleto()
+    public function boletos()
     {
         return $this->hasMany(Boleto::class);
     }

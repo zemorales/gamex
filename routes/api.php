@@ -51,6 +51,16 @@ Route::group(['prefix'=>'v1','namespace'=>'App\Http\Controllers\Api'],function()
  Route::resource('categorias','CategoriasController');
  Route::resource('boletos','BoletosController');
  Route::resource('torneos','TorneosController');
+ Route::resource('categorias/comision','CategoriasComisionController');
+ Route::resource('comision/boleto','ComisionBoletoController');
+ Route::resource('preventa/boleto','PreventaBoletosController');
+ 
  //Route::resource('usuarios','TorneosController');
  Route::get('torneos/contar/usuarios/{tipo_usuario}/{torneo_id}', 'TorneosController@contarUsuarios');
+ Route::post('torneos/inscribir/usuarios/{torneo_id}', 'TorneosController@inscribirUsuario');
+ Route::post('notificaciones', 'SendUsersNotificationsController@sendNotifications');
+
+ Route::get('total/comisiones/torneos', 'ReportesComisionesController@totalComisionesTorneos'); 
+ Route::get('preventa/boletos/{torneo_id}', 'PreventaBoletosController@obtenerValorboleto'); 
+
 });

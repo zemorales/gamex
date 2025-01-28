@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBoletosTable extends Migration
+class CreatePreventaBoletosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,15 @@ class CreateBoletosTable extends Migration
      */
     public function up()
     {
-        Schema::create('boletos', function (Blueprint $table) {
+        Schema::create('preventa_boletos', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo_qr');
-            $table->boolean('activo');
-            $table->FLOAT('valor_boleto');
-
+            $table->date('fecha_inicio_prev');
+            $table->date('fecha_final_prev');
+            $table->string('valor_boleto');
+            $table->enum('categoria', array('precio_visitante', 'precio_competidor'));
             $table->bigInteger('torneo_id')->unsigned();
             $table->foreign('torneo_id')->references('id')->on('torneos')
             ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->bigInteger('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')
-            ->onDelete('cascade')->onUpdate('cascade');
-
             $table->timestamps();
         });
     }
@@ -38,6 +33,6 @@ class CreateBoletosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('boletos');
+        Schema::dropIfExists('preventa_boletos');
     }
 }

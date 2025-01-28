@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/mail', function () {
+    $user = App\Models\User::find(1);
+    $torneo = App\Models\Torneo::find(5);
+    $boleto = App\Models\Boleto::find(7);
+    $mensaje = "Gracias por participar en el torneo de $torneo->nombre_torneo"; //prueba para ver la plantilla
+    $ocultar = "vacio";
+    return view('content.mails.event_management', compact('user', 'boleto', 'mensaje','ocultar'));
 });

@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Boleto;
-use App\Models\CategoriaComision;
-use App\Models\ComisionBoleto;
 use App\Models\Torneo;
+use App\Models\User;
 use App\Notifications\BuyTicketNotification;
+use App\Notifications\SendUsersNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
-class BoletosController extends Controller
+class SendUsersNotificationsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,30 +29,13 @@ class BoletosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    
+    public function sendNotifications(Request $request)
     {
-        $request['user_id'] = auth()->user()->id;
-        $boleto = Boleto::create($request->all());
-        $mensaje = "Gracias por participar en el torneo de {$boleto->torneo->nombre_torneo}";
-        $torneo = Torneo::findOrFail($request->torneo_id);
-        auth()->user()->notify(new BuyTicketNotification($boleto, $mensaje));
-        $torneo->usuarios()->attach(auth()->user()->id, ['tipo_usuario' => $request->tipo_usuario]);
+       $users = User::whereIn('id', $request->user_id)->get();      
+       Notification::send($users, new SendUsersNotification($request->asunto, $request->mensaje));
 
-        $categoriascomision = CategoriaComision::all();
-        foreach ($categoriascomision as $categoria) {
-                $comision = ($boleto->valor_boleto * $categoria->porcentaje)/100;
-
-                ComisionBoleto::create([
-                    'boleto_id' => $boleto->id,
-                    'categoria_comision_id' => $categoria->id,
-                    'porcentaje_cobrado' => $categoria->porcentaje,
-                    'valor_comision' => $comision
-                ]);
-                
-        }
-       
-
-        return response()->json($boleto, 201);
+        return response()->json($users, 201);
         //return response()->json(['message' => 'Boleto creado'], 201);
     }
 

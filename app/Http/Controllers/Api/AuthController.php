@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\SendEventMail;
 use App\Mail\SendUserResetPasswordMail;
 use App\Models\User;
+use App\Notifications\EventCreateNotification;
 use App\Notifications\UserRegisterNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +42,8 @@ class AuthController extends Controller
         } catch (JWTException $e) {
             return response()->json(['error' => 'No se pudo conectar al servidor'], 501);
         }
+        
+        
         if (auth()->user()->status_id == 5) return response()->json(['errors' => ['Esta cuenta no esta activa.']], 201);
         return $this->respondWithToken($token);
     }
